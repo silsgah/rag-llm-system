@@ -8,7 +8,6 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.11"
-zenml = { version = "0.74.0", extras = ["server"] }
 pymongo = "^4.6.2"
 click = "^8.0.1"
 loguru = "^0.7.2"
@@ -16,7 +15,6 @@ rich = "^13.7.1"
 numpy = "^1.26.4"
 poethepoet = "0.29.0"
 datasets = "^3.0.1"
-torch = "2.2.2"
 
 # Digital data ETL
 selenium = "^4.21.0"
@@ -38,14 +36,16 @@ fake-useragent = "^1.5.1"
 langchain-community = "^0.2.11"
 
 # Inference
-fastapi = ">=0.100,<=0.110"
+fastapi = ">=0.100,<=0.115.8"
 uvicorn = "^0.30.6"
 opik = "^0.2.2"
 html2text = "^2025.4.15"
 undetected-chromedriver = "^3.5.5"
-pydantic = ">=2.8.0,<2.9.0"
-torchvision = "0.17.2"
+pydantic = "^2.11.7"
 huggingface-hub = ">=0.25.0"
+comet-ml = "^3.43.2"
+zenml = { version = ">=0.91.1", extras = ["server"] }
+vllm = "0.10.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -60,6 +60,12 @@ s3fs = ">2022.3.0"
 aws-profile-manager = "^0.7.3"
 kubernetes = "^30.1.0"
 sagemaker-huggingface-inference-toolkit = "^2.4.0"
+
+
+[tool.poetry.group.vector-db-extra.dependencies]
+# Optional alternative vector databases (for learning and comparison)
+faiss-cpu = "^1.8.0"
+chromadb = "^0.5.0"
 
 
 [build-system]
@@ -127,6 +133,8 @@ delete-settings-zenml = "poetry run zenml secret delete settings"
 create-sagemaker-role = "poetry run python -m rag_llm_system.infrastructure.aws.roles.create_sagemaker_role"
 create-sagemaker-execution-role = "poetry run python -m rag_llm_system.infrastructure.aws.roles.create_execution_role"
 deploy-inference-endpoint = "poetry run python -m rag_llm_system.infrastructure.aws.deploy.huggingface.run"
+deploy-inference-local = "poetry run python -m rag_llm_system.infrastructure.local.local_deploy"
+test-inference-local = "poetry run python -m rag_llm_system.model.inference.localtest"
 test-sagemaker-endpoint = "poetry run python -m rag_llm_system.model.inference.test"
 delete-inference-endpoint = "poetry run python -m rag_llm_system.infrastructure.aws.deploy.delete_sagemaker_endpoint"
 
