@@ -1,5 +1,7 @@
 # Environment variables
 .env
+.zen
+.claude
 *.env.local
 
 # Python
@@ -78,6 +80,7 @@ htmlcov/
 
 # Chrome drivers
 chromedriver
+*.deb
 *.deb.*
 
 # AWS CLI
@@ -91,3 +94,14 @@ README_ORIGINAL.md
 # Temporary
 *.tmp
 .cache/
+
+# Vector database storage (demo/test data)
+demo_faiss_storage/
+demo_chroma_storage/
+demo_chroma/
+real_data_faiss/
+example_faiss/
+faiss_storage/
+chroma_storage/
+*.index
+*.sqlite3
