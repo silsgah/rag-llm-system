@@ -1,0 +1,100 @@
+# Environment variables
+.env
+*.env.local
+.env.runpod
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+.claude/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints
+
+# Poetry
+poetry.lock.backup
+pyproject.toml.backup
+
+# ZenML
+.zenml/
+*.db
+
+# AWS
+*.pem
+*.key
+sagemaker_user_credentials.json
+sagemaker_execution_role.json
+
+# Logs
+*.log
+logs/
+
+# Data
+data/
+*.csv
+*.json.backup
+
+# Model outputs
+outputs/
+rag_llm_system/model/finetuning/model_*/
+rag_llm_system/model/finetuning/outputs/
+rag_llm_system/model/finetuning/unsloth_compiled_cache/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Chrome drivers
+chromedriver
+*.deb.*
+
+# AWS CLI
+aws/
+awscliv2.zip
+
+# Original files
+README_ORIGINAL.md
+AI_GOVERNANCE_GUIDE.md
+ARCHITECTURE.md
+QUICK_DEPLOY.md
+DEPLOYMENT_GUIDE.md
+*.backup
+git stash show -p | grep deb
+git stash show -p
+pip install git-filter-repo
+git filter-repo --path google-chrome-stable_current_amd64.deb --invert-paths
+rm -rf .git
+# Temporary
+*.tmp
+.cache/

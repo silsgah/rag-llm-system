@@ -1,0 +1,31 @@
+settings:
+  docker:
+    parent_image: 992382797823.dkr.ecr.eu-central-1.amazonaws.com/zenml-rlwlcs:latest
+    skip_build: true
+  orchestrator.sagemaker:
+    synchronous: false
+
+parameters:
+  user_full_name: Ghana News Collector
+  links:
+    # Ghana News Portals
+    - https://www.myjoyonline.com
+    - https://citinewsroom.com
+    - https://www.graphic.com.gh
+    - https://www.ghanaweb.com
+    - https://www.peacefmonline.com
+    - https://www.3news.com
+    - https://www.adomonline.com
+    - https://www.pulse.com.gh
+    - https://dailyguidenetwork.com
+    - https://www.ghanaianchronicle.com
+    - https://thebftonline.com
+    - https://www.starrfm.com.gh
+    - https://www.rainbowradioonline.com
+    - https://ghanasoccernet.com
+    - https://www.modernghana.com
+    - https://www.ghanabusinessnews.com
+    - https://www.newsghana.com.gh
+    - https://www.ghananewsagency.org
+    - https://theindependentghana.com
+    - https://www.ghanaweb.live

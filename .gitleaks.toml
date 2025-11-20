@@ -1,0 +1,19 @@
+title = "Custom Gitleaks Config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Ignore example env files and placeholder secrets"
+# allowlist the file by exact name and possible repo-relative path
+files = [
+  '''(^|/)\\.env\\.example$''',
+]
+# allowlist placeholders inside it
+regexes = [
+  '''COMET_API_KEY=.*''',
+  '''QDRANT_APIKEY=.*''',
+  '''AWS_ACCESS_KEY=.*''',
+  '''AWS_SECRET_KEY=.*''',
+]
+
