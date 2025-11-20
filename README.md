@@ -90,6 +90,8 @@ This is a **full-stack, production-grade AI system** that demonstrates:
 
 ## 🏛️ Architecture
 
+![System Architecture Diagram](architectureDiagram.png)
+
 ### System Architecture
 
 ```
