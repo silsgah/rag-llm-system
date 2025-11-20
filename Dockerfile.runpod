@@ -1,0 +1,90 @@
+# ============================================================================
+# RunPod Dockerfile for LLM Inference Server
+# ============================================================================
+# This Dockerfile is specifically designed for deploying the inference server
+# to RunPod GPU instances (Serverless or Pods).
+#
+# Base Image: RunPod's official PyTorch image with CUDA support
+# Purpose: Run the local_deploy.py FastAPI inference server on GPU
+# ============================================================================
+
+FROM runpod/pytorch:2.1.0-py3.10-cuda11.8.0-devel
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Set working directory
+WORKDIR /app
+
+# ============================================================================
+# Install System Dependencies
+# ============================================================================
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    wget \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# ============================================================================
+# Install Python Dependencies for Inference
+# ============================================================================
+# Installing only the minimal dependencies needed for inference
+# to keep the image size smaller and build time faster
+
+RUN pip install --no-cache-dir \
+    transformers==4.46.0 \
+    accelerate==1.2.1 \
+    fastapi==0.115.8 \
+    uvicorn==0.30.6 \
+    pydantic==2.11.7 \
+    pydantic-settings==2.7.1 \
+    loguru==0.7.2 \
+    huggingface-hub>=0.25.0 \
+    sentencepiece \
+    protobuf
+
+# ============================================================================
+# Copy Application Code
+# ============================================================================
+# Copy only the files needed for inference (not the entire project)
+
+# Create the directory structure
+RUN mkdir -p /app/rag_llm_system/infrastructure/local
+
+# Copy the settings module
+# Note: We create a minimal __init__.py and simplified settings.py for inference
+RUN echo -e "from rag_llm_system.settings import settings\n__all__ = ['settings']" > /app/rag_llm_system/__init__.py
+
+# Create a simplified settings.py for inference (no ZenML dependency)
+RUN printf 'from pydantic_settings import BaseSettings, SettingsConfigDict\n\nclass Settings(BaseSettings):\n    model_config = SettingsConfigDict(\n        env_file=".env",\n        env_file_encoding="utf-8",\n        extra="ignore",\n    )\n\n    HUGGINGFACE_ACCESS_TOKEN: str | None = None\n    HF_MODEL_ID: str = "mlabonne/TwinLlama-3.1-8B-DPO"\n    OPENAI_API_KEY: str | None = None\n    OPENAI_MODEL_ID: str = "gpt-4o-mini"\n\nsettings = Settings()\n' > /app/rag_llm_system/settings.py
+
+# Copy the local inference modules
+COPY rag_llm_system/infrastructure/__init__.py /app/rag_llm_system/infrastructure/
+COPY rag_llm_system/infrastructure/local/__init__.py /app/rag_llm_system/infrastructure/local/
+COPY rag_llm_system/infrastructure/local/local_deploy.py /app/rag_llm_system/infrastructure/local/
+COPY rag_llm_system/infrastructure/local/governance.py /app/rag_llm_system/infrastructure/local/
+
+# ============================================================================
+# Create necessary directories
+# ============================================================================
+RUN mkdir -p /app/logs
+
+# ============================================================================
+# Expose the inference API port
+# ============================================================================
+EXPOSE 8000
+
+# ============================================================================
+# Health Check
+# ============================================================================
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# ============================================================================
+# Entry Point
+# ============================================================================
+# Run the FastAPI inference server
+CMD ["python", "-u", "-m", "rag_llm_system.infrastructure.local.local_deploy"]

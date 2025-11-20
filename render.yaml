@@ -1,0 +1,26 @@
+services:
+  # Main FastAPI backend
+  - type: web
+    name: rag-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerCommand: uvicorn tools.ml_service:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL_ID
+        value: gpt-4o-mini
+      - key: COMET_API_KEY
+        sync: false
+      - key: QDRANT_CLOUD_URL
+        sync: false
+      - key: QDRANT_APIKEY
+        sync: false
+      - key: DATABASE_HOST
+        sync: false
+      - key: HUGGINGFACE_ACCESS_TOKEN
+        sync: false
+      - key: USE_QDRANT_CLOUD
+        value: "true"
+    healthCheckPath: /
+    plan: starter  # $7/month, or use 'free' tier

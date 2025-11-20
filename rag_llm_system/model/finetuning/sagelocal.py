@@ -1,9 +1,9 @@
-from pathlib import Path
+import os
 import subprocess
 import sys
-import os
-import torch  # Needed for detecting GPU count
+from pathlib import Path
 
+import torch  # Needed for detecting GPU count
 from huggingface_hub import HfApi
 from loguru import logger
 
@@ -50,17 +50,18 @@ def run_finetuning_on_sagemaker(
 
     # Prepare local SageMaker-like environment variables
     env = os.environ.copy()
-    env.update({
-        "HUGGING_FACE_HUB_TOKEN": settings.HUGGINGFACE_ACCESS_TOKEN,
-        "COMET_API_KEY": settings.COMET_API_KEY,
-        "COMET_PROJECT_NAME": settings.COMET_PROJECT,
-
-        # Fake SageMaker env vars for local runs
-        "SM_NUM_GPUS": str(torch.cuda.device_count() if torch.cuda.is_available() else 0),
-        "SM_MODEL_DIR": str(finetuning_dir / "outputs"),
-        "SM_OUTPUT_DATA_DIR": str(finetuning_dir / "data"),
-        "SM_CHANNEL_TRAIN": str(finetuning_dir / "data" / "train"),
-    })
+    env.update(
+        {
+            "HUGGING_FACE_HUB_TOKEN": settings.HUGGINGFACE_ACCESS_TOKEN,
+            "COMET_API_KEY": settings.COMET_API_KEY,
+            "COMET_PROJECT_NAME": settings.COMET_PROJECT,
+            # Fake SageMaker env vars for local runs
+            "SM_NUM_GPUS": str(torch.cuda.device_count() if torch.cuda.is_available() else 0),
+            "SM_MODEL_DIR": str(finetuning_dir / "outputs"),
+            "SM_OUTPUT_DATA_DIR": str(finetuning_dir / "data"),
+            "SM_CHANNEL_TRAIN": str(finetuning_dir / "data" / "train"),
+        }
+    )
 
     # Ensure output/data dirs exist
     Path(env["SM_MODEL_DIR"]).mkdir(parents=True, exist_ok=True)

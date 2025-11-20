@@ -4,7 +4,6 @@ from pathlib import Path
 import click
 from loguru import logger
 
-from rag_llm_system import settings
 from pipelines import (
     digital_data_etl,
     end_to_end_data,
@@ -14,6 +13,7 @@ from pipelines import (
     generate_datasets,
     training,
 )
+from rag_llm_system import settings
 
 
 @click.command(

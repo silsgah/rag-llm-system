@@ -3,7 +3,7 @@
 .zen
 .claude
 *.env.local
-
+.env.runpod
 # Python
 __pycache__/
 *.py[cod]

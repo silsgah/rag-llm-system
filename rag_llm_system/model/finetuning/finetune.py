@@ -16,7 +16,7 @@ from transformers import TextStreamer, TrainingArguments  # noqa: E402
 from trl import DPOConfig, DPOTrainer, SFTTrainer  # noqa: E402
 from unsloth import FastLanguageModel, is_bfloat16_supported  # noqa: E402
 from unsloth.chat_templates import get_chat_template  # noqa: E402
-import os
+
 os.environ["COMET_API_KEY"] = "UmcBjvdQufL4tUTwjo22D63M7"
 alpaca_template = """Below is an instruction that describes a task. Write a response that appropriately completes the request.
 
@@ -41,9 +41,9 @@ def load_model(
         model_name=model_name,
         max_seq_length=max_seq_length,
         load_in_4bit=True,  # CHANGE TO True
-    dtype=torch.float16,
-    device_map={"": 0},  # CHANGE from "auto" to specific GPU
-    low_cpu_mem_usage=False,  # ADD this
+        dtype=torch.float16,
+        device_map={"": 0},  # CHANGE from "auto" to specific GPU
+        low_cpu_mem_usage=False,  # ADD this
     )
 
     model = FastLanguageModel.get_peft_model(
@@ -86,14 +86,14 @@ def finetune(
     model, tokenizer = load_model(
         model_name, max_seq_length, load_in_4bit, lora_rank, lora_alpha, lora_dropout, target_modules, chat_template
     )
-    
+
     # Ensure model is properly loaded and not in meta state
-    if hasattr(model, 'tie_weights'):
+    if hasattr(model, "tie_weights"):
         model.tie_weights()
-    
+
     # Handle meta tensors properly - DON'T use .to() on meta tensors
     # The model should already be on the right device from FastLanguageModel.from_pretrained
-    
+
     EOS_TOKEN = tokenizer.eos_token
     print(f"Setting EOS_TOKEN to {EOS_TOKEN}")  # noqa
 

@@ -1,9 +1,11 @@
-from pathlib import Path
+import os
 import subprocess
 import sys
-import os
+from pathlib import Path
+
 from huggingface_hub import HfApi
 from loguru import logger
+
 from rag_llm_system.settings import settings
 
 evaluation_dir = Path(__file__).resolve().parent
@@ -31,13 +33,15 @@ def run_evaluation_locally(
 
     # Prepare local environment variables
     env = os.environ.copy()
-    env.update({
-        "HUGGING_FACE_HUB_TOKEN": settings.HUGGINGFACE_ACCESS_TOKEN,
-        "OPENAI_API_KEY": settings.OPENAI_API_KEY,  # If your eval needs it
-        "DATASET_HUGGINGFACE_WORKSPACE": dataset_huggingface_workspace,
-        "MODEL_HUGGINGFACE_WORKSPACE": huggingface_user,
-        # You can add more if evaluation.py expects them
-    })
+    env.update(
+        {
+            "HUGGING_FACE_HUB_TOKEN": settings.HUGGINGFACE_ACCESS_TOKEN,
+            "OPENAI_API_KEY": settings.OPENAI_API_KEY,  # If your eval needs it
+            "DATASET_HUGGINGFACE_WORKSPACE": dataset_huggingface_workspace,
+            "MODEL_HUGGINGFACE_WORKSPACE": huggingface_user,
+            # You can add more if evaluation.py expects them
+        }
+    )
     if is_dummy:
         env["IS_DUMMY"] = "True"
 

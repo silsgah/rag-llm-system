@@ -5,7 +5,11 @@ from zenml.exceptions import EntityExistsError
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",  # <--- ignore unknown keys like opik_workspace
+    )
 
     # --- Required settings even when working locally. ---
 
@@ -15,6 +19,10 @@ class Settings(BaseSettings):
 
     # Huggingface API
     HUGGINGFACE_ACCESS_TOKEN: str | None = None
+
+    # Inference Configuration
+    USE_LOCAL_INFERENCE: bool = False  # Set to True to use HTTP endpoint instead of SageMaker
+    LOCAL_INFERENCE_ENDPOINT_URL: str = "http://127.0.0.1:8000/infer"  # RunPod or local endpoint
 
     # Comet ML (during training)
     COMET_API_KEY: str | None = None
@@ -39,7 +47,6 @@ class Settings(BaseSettings):
     AWS_ACCESS_KEY: str | None = None
     AWS_SECRET_KEY: str | None = None
     AWS_ARN_ROLE: str = "arn:aws:iam::716969407371:role/SageMakerExecutionRoleLLM"
-
 
     # --- Optional settings used to tweak the code. ---
 

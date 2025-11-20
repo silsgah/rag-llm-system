@@ -8,7 +8,7 @@ from rag_llm_system.application.rag.retriever import ContextRetriever
 from rag_llm_system.application.utils import misc
 from rag_llm_system.domain.embedded_chunks import EmbeddedChunk
 from rag_llm_system.infrastructure.opik_utils import configure_opik
-from rag_llm_system.model.inference import InferenceExecutor, LLMInferenceSagemakerEndpoint
+from rag_llm_system.model.inference import InferenceExecutor, LLMInferenceSagemakerEndpoint, LLMInferenceLocalEndpoint
 
 configure_opik()
 
@@ -25,9 +25,16 @@ class QueryResponse(BaseModel):
 
 @opik.track
 def call_llm_service(query: str, context: str | None) -> str:
-    llm = LLMInferenceSagemakerEndpoint(
-        endpoint_name=settings.SAGEMAKER_ENDPOINT_INFERENCE, inference_component_name=None
-    )
+    # Choose inference endpoint based on configuration
+    if settings.USE_LOCAL_INFERENCE:
+        # Use RunPod or local HTTP endpoint
+        llm = LLMInferenceLocalEndpoint(endpoint_url=settings.LOCAL_INFERENCE_ENDPOINT_URL)
+    else:
+        # Use AWS SageMaker (default behavior)
+        llm = LLMInferenceSagemakerEndpoint(
+            endpoint_name=settings.SAGEMAKER_ENDPOINT_INFERENCE, inference_component_name=None
+        )
+
     answer = InferenceExecutor(llm, query, context).execute()
 
     return answer

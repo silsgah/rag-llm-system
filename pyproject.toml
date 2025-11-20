@@ -2,7 +2,7 @@
 name = "rag-llm-system"
 version = "1.0.0"
 description = "Production-ready RAG system with LLM fine-tuning"
-authors = ["silsgah <silsgah@example.com>"]
+authors = ["Silas Kwabla Gah <gahsilas@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 
