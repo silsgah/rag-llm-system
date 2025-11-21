@@ -22,8 +22,6 @@ This is a **full-stack, production-grade AI system** that demonstrates:
 - ✅ **Clean Architecture**: Domain-Driven Design with ~6,000 lines of well-structured code
 - ✅ **CI/CD Pipeline**: Automated testing, linting, and deployment workflows
 
-**Built following**: [LLM Engineer's Handbook](https://www.amazon.com/LLM-Engineers-Handbook-engineering-production/dp/1836200072/) best practices.
-
 ---
 
 ## 📋 Table of Contents
